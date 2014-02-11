@@ -1,0 +1,12 @@
+{% extends "base.html"%}
+
+{% block head %}
+<link rel="style" href="{{ static_url("style.css") }}">
+{% end %}
+
+{% block body %}
+  <div class="entry-content h-center v-center">
+  <h2 class="h-center">{{ entry["title"] if entry else ""}}</h2>
+    {% raw entry["markdown"] if entry else"" %}
+  </div>
+{% end %}

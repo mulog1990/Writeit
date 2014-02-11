@@ -1,0 +1,66 @@
+#editor {
+  width:70%;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+#title-input {
+  width:100%;
+}
+
+#markdown-input {
+  width:100%;
+}
+
+.sidebar {
+  background-color: #2222CC;
+  float:left;
+  position:fixed;
+  width: 275px;
+  left: 300px;
+  margin-left: -300px;
+  top: 0px;
+  height:100%;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.index-content {
+  margin-left: 350px;
+}
+
+.index-page {
+  padding: 0px;
+  padding-top: 0px;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#blog-name-box {
+  margin-top: 20%;
+  margin-left:20%;
+  color: #000000;
+  font-family: "sans-serif Verdana";
+  font-size: x-large;
+}
+
+#blog-name {
+  text-align: left;
+  font-weight: bold;
+}
+
+#slogan {
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+#sidebar-copyright {
+  position: absolute;
+  bottom: 5%;
+  margin-left: 20%;
+  color: #000000;
+  font-size: small;
+}

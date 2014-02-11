@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div id="editor">
+      <form name="editor-form" action="#" method="post">
+      {% raw xsrf_form_html() %}
+      <input name="title" type="text" id="title-input" value={{ entry["title"] if entry else "New Entry" }}></input>
+      <textarea id="markdown-input" name="markdown" rows="24">{{ entry["markdown"] if entry else "" }}</textarea>
+      <input type="submit" value="Submit" class="btn btn-success"> 
+      </form>
+</div> 
+
+{% end %}
