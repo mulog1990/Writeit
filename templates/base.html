@@ -2,14 +2,26 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ static_url("write.css") }}" rel="stylesheet">
-  {% block head %}{% end %}
+    <link href="{{ static_url("common.css") }}" rel="stylesheet"/>
+    {% block head %} {% end %}
   </head>
 
   <body>
-    {% block body %}{% end %}
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+
+  {% block body %} {% end %}
+
+  <div id="footer">
+  <p>
+  自豪地不采用WordPress:)</br>
+  Copyright 2014 Mulog
+  </p>
+  </div>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+
+  {% block script %} {% end %}
   </body>
 </html>
 

@@ -1,16 +1,4 @@
-#editor {
-  width:70%;
-  margin-left:auto;
-  margin-right:auto;
-}
 
-#title-input {
-  width:100%;
-}
-
-#markdown-input {
-  width:100%;
-}
 
 .sidebar {
   background-color: #2222CC;
@@ -23,20 +11,7 @@
   height:100%;
   background-size: 100%;
   background-repeat: no-repeat;
-}
-
-.index-content {
-  margin-left: 350px;
-}
-
-.index-page {
-  padding: 0px;
-  padding-top: 0px;
-}
-
-.center {
-  margin-left: auto;
-  margin-right: auto;
+  z-index: 1;
 }
 
 #blog-name-box {

@@ -9,4 +9,18 @@
   <h2 class="h-center">{{ entry["title"] if entry else ""}}</h2>
     {% raw entry["markdown"] if entry else"" %}
   </div>
+  <div class="hidden" id="tags">A
+  	{% if tags %}
+  		{% for tag in tags%}
+  			{{ tag["tag"] }}
+  		{% end %}
+  	{% end %}
+  </div>
+ {% end %}
+
+{% block script %}
+ 	<script type="text/javascript">
+ 		console.log($("#tags").html());
+ 	</script>
+
 {% end %}

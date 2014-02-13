@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+#-*- coding:utf-8 -*-
 import os.path
 
 import torndb
@@ -28,7 +29,8 @@ class Application(tornado.web.Application):
             (r"/test", TestHandler),
             (r"/write", WriteHandler),
             (r"/entry", EntryHandler),
-            (r"/removeEntry", RemoveEntryHandler)
+            (r"/removeEntry", RemoveEntryHandler),
+            (r"/parse", ParseHandler)           #takes markdown input, returns html
         ]
 
         settings=dict(
@@ -57,6 +59,13 @@ class BaseHandler(tornado.web.RequestHandler):
             return None
         return user
 
+class ParseHandler(BaseHandler):
+    @tornado.web.authenticated
+    def post(self):
+        md = self.get_argument("markdown","")
+        self.write(markdown.markdown(md))
+#self.write(markdown.markdown(unicode(md, "utf-8")))
+
 class TestHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
@@ -69,7 +78,6 @@ class WriteHandler(BaseHandler):
         entry = None
         if entry_id:
             entry = self.db.get("SELECT * FROM entry_v WHERE entry_id = %s", int(entry_id)) 
-            print entry["markdown"]
         self.render("write.html", entry=entry)
 
     @tornado.web.authenticated
@@ -103,6 +111,7 @@ class WriteHandler(BaseHandler):
                 SELECT id FROM users WHERE email=%s)",
                 title,markdown_id,'-'.join(title.split()),user_email
             )
+        self.redirect("/?new=true")
         self.write("Post Successfully Published!")
 
        
@@ -114,7 +123,9 @@ class EntryHandler(BaseHandler):
         if entry_id:
             entry = self.db.get("SELECT * from entry_v where entry_id=%s",
                     int(entry_id))
-        self.render("entry.html", entry=entry)
+            tags = self.db.query("SELECT tag FROM tag_v WHERE entry_id=%s",
+                    int(entry_id))
+        self.render("entry.html", entry=entry, tags=tags)
 
 
 
@@ -137,9 +148,10 @@ class AuthLoginHandler(BaseHandler, tornado.auth.GoogleMixin):
 class HomeHandler(BaseHandler):
     def get(self):
         entries = self.db.query("select * from entry_v order by entry_id desc limit 10")
+        new = self.get_arguments("new", None)
         for entry in entries:
             entry["html"] = markdown.markdown(entry["markdown"])
-        self.render("index.html",entries=entries)
+        self.render("index.html",entries=entries,new=new)
 
 
 class RemoveEntryHandler(BaseHandler):

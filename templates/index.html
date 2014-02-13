@@ -1,14 +1,15 @@
 {% extends "base.html" %}
-  
+ 
+{% block head %}
+  <link rel="stylesheet" href="{{ static_url("index.css") }}"/>
+  <link rel="stylesheet" href="{{ static_url("sidebar.css") }}"
+{% end %}
+
 {% block body %}
+    <div>
+    {% include "sidebar.html" %}
+    </div>
     <div class="index-page">
-    <div class="sidebar" style="background-image: url('http://upload.jianshu.io/daily_images/images/zba6Cf3SxpezcFJNGRCm.jpg')">
-    <div id="blog-name-box">
-    <h1 id="blog-name">Write it</h1>
-    <h3 id="slogan">Enjoy the moment</h3>
-    </div>
-    <p id="sidebar-copyright"> ©2014 Mulog</p>
-    </div>
     <div class="index-content">
     {% for entry in entries %}
     <div class="entry">
@@ -19,4 +20,17 @@
     </div>
     </div>
 {% end %}
+
+{% block script %}
+    {% if new %}
+        <script type="text/javascript">
+            var first = $("div.entry:first");
+            $(document).ready(function() {
+                first.fadeOut();
+                first.fadeIn(); 
+            });
+        </script>
+    {% end %}
+{% end %}
+
 
