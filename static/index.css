@@ -1,22 +1,46 @@
-
-
-.main-content {
-  margin-left: 375px;
+html,body {
+  padding: 0;
 }
 
-.main-page {
-  padding: 0px;
-  padding-top: 0px;
-  background-color: #EEEEEE;
-  position:fixed;
-  top:0;
-  width: 100%;
-  height: 100%;
-}
 
 .center {
   margin-left: auto;
   margin-right: auto;
+}
+
+.main-content {
+  margin-left: 400px;
+  margin-right: 100px;
+}
+
+.entry-module-summary {
+  margin-right: 125px;
+  text-align: justify;
+  margin-left: 5px;
+}
+
+.title-hover {
+  height: 25px;
+  display: none;
+  margin-left: 10px;
+}
+
+.entry:hover .title-hover {
+  display: inline;
+}
+
+.entry-module-title {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.publish-date {
+  margin-left: 3px;
+  margin-bottom: 15px;
+}
+
+.entry {
+  margin-bottom: 30px;
 }
 
 

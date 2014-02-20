@@ -1,17 +1,40 @@
 {% extends "base.html" %}
 
 {% block head %}
-  <link rel="stylesheet" href="{{ static_url("editor.css") }}"/>
+  <link rel="stylesheet" href="{{ static_url("editor.css") }}">
+  <link rel="stylesheet" href="{{ static_url("editor.css") }}">
+  <link rel="stylesheet" href="{{ static_url("tag.css") }}">
+  <link rel="stylesheet" href="{{ static_url("tags.css") }}">
+
+
+
 {% end %}
 
 {% block body %}
 
 <div id="write-bg">
 <div id="editor">
-      <form name="editor-form" action="#" method="post">
+      <form id="editor-form" name="editor-form" action="#" method="post">
       {% raw xsrf_form_html() %}
-      <input name="title" type="text" class="form-control" id="title-input" value="{{ entry["title"] if entry else ""}}" placeholder="{{ "Title" if not entry else "" }}"></input>
+      <input name="title" type="text" class="form-control" id="title-input" value="{{ entry["title"] if entry else ""}}" placeholder="{{ "Title" if not entry else "" }}">
+      <input class="hidden" name="new-slug" id="new-slug">
+      <div class="editor-slug">Slug: <div id="slug" class="inline">{{ entry["slug"] if entry else "" }}</div></div>
       <textarea id="markdown-input" name="markdown" rows="20" class="form-control">{{ entry["markdown"] if entry else "" }}</textarea>
+      <div id="editor-tag">
+        <input type="text" id="tag-input" class="form-control">
+        <input type="button" id="add-tag-btn" class="btn btn-default" value="Add tag(s)">
+        <input type="button" id="auto-tag-btn" class="btn btn-default" value="Add suggested tags">
+        <div id="tag-list" class="of-hid">
+            <ul id="tags" class="tags">
+              {% if entry and entry["tags"] %}
+              {% for tag in entry["tags"] %}
+                <li id="tag-{{ tag["tag"] }}" class="tag-li"><a>{{ tag["tag"] }}</a>
+                </li>
+              {% end %}
+              {% end %}
+            </ul>
+        </div>
+      </div>
       <div id="button-row">
         <input value="Preview" class="btn btn-primary" id="editor-preview" onclick="showHtml()">
         <input type="submit" value="Submit" class="btn btn-success" id="editor-submit"> 
@@ -44,12 +67,27 @@
 {% block script %}
   <script type="text/javascript">
   
+  $(document).ready(function() {
+    $("#slug").click(function() {
+      if ($("#slug").find(">:first-child").is("input")) {
+      return;
+    }
+    oldhtml = $("#slug").html();
+    $("#slug").html("").append("<input class='form-control inline'  type='text' value='" + oldhtml + "'>");
+    $("#slug").find("input").blur(function () {
+      $("#slug").html($(this).val())
+    }).focus();
+
+    });
+
+  });
+
   function showHtml() {
-    $.post("parse",
+    $.post("/ajax/parse",
       {
         _xsrf: $("input[name='_xsrf'").val(),
         markdown: "#" + $("#title-input").val() + "\n" +
-          $("#markdown-input").val()
+          $("#markdown-input").val(),
       },
       function(data, status) {
         $(".modal-body").html(data);
@@ -57,6 +95,133 @@
       }
     );
   }
+
+  $(document).ready(function() {
+    $("#title-input").blur(getValidSlug);
+      //$("#slug").html($("#title-input").val());
+      $("#new-slug").attr("value", $("#slug").html());
+
+      $('#slug').bind("DOMSubtreeModified",function(){
+        $("#new-slug").attr("value", $("#slug").html());
+      });
+
+    });
+
+  function getValidSlug() {
+    var slugName = $.ajax({
+      url: "/ajax/get-slug",
+      data: {
+        "slug": $("#title-input").val()
+      },
+      success: function(data) {
+        $("#slug").html(data);
+      }
+      });
+  }
   </script>
+
+  <script type="text/javascript">
+    //add hover events for tags
+    $(function() {
+      addTagHover($(".tag-li"));
+    });
+
+    function addTagHover(obj) {
+      $(obj).hover(
+        function() {
+          $(this).append("<button id='rmv-tag-btn' type='button' class='btn btn-sm btn-default'><span class='glyphicon glyphicon-remove'></span></button>");
+          var removeButton = $(this).find("button");
+          removeButton.click(function() {
+            removeTag(removeButton);
+          });
+        },
+        function() {
+          $(this).find("button").remove();
+        }
+    );
+    }
+
+    $(document).ready(function() {
+      $("#add-tag-btn").click(addTags);
+    });
+
+    function addTags() {
+      var newTags = $("#tag-input").val().split(',');
+      for (var i = 0;i < newTags.length;i++) {
+        var tag = newTags[i];
+        if(!$("#tag-" + tag).length) {   //tag doesnt exist yet
+          // $("#tags").append("<li class='tag' id='tag-" + tag + "'><a>" + tag + "</a></li>");
+          $("<li>", {
+            class: "tag-li",
+            id: "tag-" + tag
+          }).append($("<a>").html(tag))
+            .css("display", "None")
+            .appendTo("#tags");
+
+          addTagHover($("#tags li:last-child"));
+          $("#tags li:last-child").fadeIn(500);
+        }
+      }
+    }
+
+    function removeTag(obj) {
+      $(obj).parent().fadeOut(500, function() {
+        $(this).remove();
+      });
+    }
+
+  </script>
+
+  <script type="text/javascript">
+    $(function() {
+      $("#editor-form").submit(function() {
+
+        var tags = new Array();
+        var tagList = $(".tag-li").find("a");
+        for(var i = 0;i < tagList.length;i++) {
+          tags.push($(tagList[i]).html());
+        }
+        var tagParam = tags.join();
+        params = [
+                  {
+                    name: "tags",
+                    value: tagParam
+                  }
+        ];
+
+
+        $.each(params, function(i, param){
+
+          $('<input/>').attr("type", "hidden")
+          .attr("name", param.name)
+          .attr("value", param.value)
+          .appendTo("#editor-form");
+        });
+        return true;
+      });
+    });
+
+    //arrow key navigation
+    /*
+    //pure js, works
+    document.onkeydown = function(event) {
+      console.log(event.keyCode);
+      if(event.ctrlKey && event.keyCode == 13) {
+        console.log("go");
+        $("#editor-form").submit();
+      }
+    };
+    */
+
+    //jQuery
+    $(window).keydown(function(e) {
+      if (e.ctrlKey && e.keyCode == 13) {
+        $("#editor-form").submit();
+      }
+    });
+
+
+  </script>
+
 {% end %}
 

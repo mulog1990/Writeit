@@ -1,0 +1,9 @@
+.main-page #footer {
+	display: block;
+	position: absolute;
+	margin-left: 900px;
+	margin-top: 35px;
+	height: 55px;
+	bottom: 0;
+	padding: 0;
+}

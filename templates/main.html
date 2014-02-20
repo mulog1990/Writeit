@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+ 
+{% block head %}
+
+{% end %}
+
+{% block body %}
+    <div>
+    {% include "sidebar.html" %}
+    </div>
+    <div class="main-page container">
+    <div class="main-content">
+    {% block content %}{% end %}
+    </div>
+    {% include "footer.html" %}
+    </div>
+{% end %}
+
+

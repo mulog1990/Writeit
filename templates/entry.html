@@ -1,26 +1,66 @@
-{% extends "base.html"%}
+{% extends "main.html"%}
 
 {% block head %}
-<link rel="style" href="{{ static_url("style.css") }}">
+	<link rel="stylesheet" href="{{ static_url("entry.css") }}"/>
+	<link rel="stylesheet" href="{{ static_url("sidebar.css") }}"/>
+	<link rel="stylesheet" href="{{ static_url("footer.css") }}"/>
+  <link rel="stylesheet" href="{{ static_url("tag.css") }}"/>
+
 {% end %}
 
-{% block body %}
+{% block content %}
   <div class="entry-content h-center v-center">
-  <h2 class="h-center">{{ entry["title"] if entry else ""}}</h2>
-    {% raw entry["markdown"] if entry else"" %}
+  <h1 class="h-center" id="entry-title">{{ entry["title"] if entry else ""}}</h1>
+    <div class="tags-div">
+      <span id="tag-span">tags:</span> 
+      <ul class="tags">
+        {% for tag in entry["tags"] %}
+          <li class="tag-li">
+            <a href="/tag/{{ tag["tag"]}} ">{{ tag["tag"] }}</a>
+          </li>
+        {% end %}
+      </ul>
+    </div>
+    <br/>
+    <div class="h-center" id="entry-text">
+      {% raw entry["html"] if entry else"" %}
+    </div>
+
+
+  <div class="entry-nav">
+    <div id="entry-nav-prev">
+      <a href="{{ "./" + neighbors["prev"]["slug"] if "prev" in neighbors else "" }}" data-toggle="tooltip" data-placement="bottom" title="{{ neighbors["prev"]["title"] if "prev" in neighbors else "None" }}"> 
+        Prev: {{ neighbors["prev"]["title"][:15] if "prev" in neighbors else "None" }}
+      </a>
+    </div>
+    <div id="entry-nav-next">
+      <a href="{{ "./" + neighbors["next"]["slug"] if "next" in neighbors else "" }}" data-toggle="tooltip" data-placement="bottom" title="{{ neighbors["next"]["title"] if "next" in neighbors else "None" }}"> 
+        Next: {{ neighbors["next"]["title"][:15] if "next" in neighbors else "None" }}
+      </a>
+    </div>
   </div>
-  <div class="hidden" id="tags">A
-  	{% if tags %}
-  		{% for tag in tags%}
-  			{{ tag["tag"] }}
-  		{% end %}
-  	{% end %}
+    
   </div>
+
+
  {% end %}
 
 {% block script %}
  	<script type="text/javascript">
- 		console.log($("#tags").html());
+
+    //enable tooltip
+    $(function () { $("[data-toggle='tooltip']").tooltip(); });
+
+    //arrow key navigation
+ 		document.onkeydown = function() {
+      switch (window.event.keyCode) {
+        case 37:  //left
+          window.location = $("#entry-nav-prev").find("a").eq(0).attr("href");
+          break;
+        case 39:  //right
+          window.location = $("#entry-nav-next").find("a").eq(0).attr("href");
+      }
+    };
  	</script>
 
 {% end %}

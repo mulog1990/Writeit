@@ -15,7 +15,7 @@ CREATE TABLE entries (
         author_id INT NOT NULL,
         markdown_id INT NOT NULL,
         title varchar(255) NOT NULL,
-        slug varchar(512) NOT NULL,
+        slug varchar(512) NOT NULL PRIMARY KEY,
         published DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 
 );
@@ -44,7 +44,27 @@ CREATE TABLE tagged (
 );
 
 DROP VIEW IF EXISTS entry_v;
-CREATE VIEW entry_v AS SELECT entries.id AS entry_id, users.name as author, title, slug,published,markdowns.markdown AS markdown, created AS modified from entries,markdowns,users where entries.markdown_id=markdowns.id AND entries.author_id=users.id;
+CREATE VIEW entry_v AS SELECT entries.id AS entry_id, users.name AS author, 
+title, slug,published,markdowns.markdown AS markdown, 
+created AS modified from entries,markdowns,users 
+WHERE entries.markdown_id=markdowns.id AND entries.author_id=users.id;
 
 DROP VIEW IF EXISTS tag_v;
 CREATE VIEW tag_v AS SELECT entries.id AS entry_id, tags.tag AS tag FROM entries,tags,tagged WHERE entries.id=tagged.entry_id AND tagged.tag_id=tags.id;
+
+DROP TRIGGER IF EXISTS null_tag;
+DELIMITER $$
+CREATE TRIGGER null_tag AFTER DELETE ON tagged 
+BEGIN
+DECLARE tag_exists Boolean;
+SET @tag_exists := 0;
+SELECT 1 into @tag_exists 
+FROM tagged 
+WHERE OLD.tag_id NOT IN (SELECT tag_id FROM tagged) LIMIT 1;
+IF @tag_exists = 1 
+THEN
+DELETE FROM tags WHERE id=OLD.tag_id;
+END IF;
+END
+$$
+DELIMITER ;

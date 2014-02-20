@@ -1,4 +1,4 @@
-
+@import url(http://fonts.googleapis.com/css?family=Quantico);
 
 .sidebar {
   background-color: #2222CC;
@@ -25,11 +25,12 @@
 #blog-name {
   text-align: left;
   font-weight: bold;
+  font-family: "Quantico";
 }
 
 #slogan {
-  margin-left: 5px;
   font-weight: bold;
+  font-family: "Quantico";
 }
 
 #sidebar-copyright {
@@ -39,3 +40,8 @@
   color: #000000;
   font-size: small;
 }
+
+a:link {text-decoration:none;}
+a:visited {text-decoration:none;}
+a:hover {text-decoration:none;}
+a:active {text-decoration:none;}

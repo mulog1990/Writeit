@@ -1,0 +1,21 @@
+{% extends "main.html" %}
+
+{% block head %}
+	<link rel="stylesheet" href="{{ static_url("tags.css")}}"/>
+	<link rel="stylesheet" href="{{ static_url("sidebar.css") }}"/>
+	<link rel="stylesheet" href="{{ static_url("footer.css") }}"/>
+	<link rel="stylesheet" href="{{ static_url("tag.css") }}"/>
+{% end %}
+
+{% block content %}
+	<div class="h-center" id="tags-table">
+		<ul class="tags">
+			{% for tag in tags %}
+				<li class="tag-li">
+					<a href="/tag/{{ tag["tag"] }}">{{ tag["tag"] }}</a>
+					 <span class="badge">{{ tag["count"] }}</span>
+				</li>
+			{% end %}
+		</ul>
+	</div>
+{% end %}

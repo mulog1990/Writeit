@@ -1,0 +1,123 @@
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+/*
+.container {
+	position: fixed;
+	z-index: 2;
+  width: 100%;
+	min-height: 100%;
+	padding: 30px 50px;
+	background: #4481AA;
+	-webkit-transition: -webkit-transform 0.5s;
+	-webkit-backface-visibility: hidden;
+}
+.containerOverlay {
+	display:none;
+	background: rgba(0,0,0,.3);
+}
+.containerOverlay,
+.containerOverlay a {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+*/
+/* Type and Buttons */
+h1 {
+	font-weight: 300;
+}
+
+
+/* Nav */
+nav {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	-webkit-transform: translate3d(-100%, 0, 0);
+	-webkit-transition: -webkit-transform 0.5s;
+	-webkit-backface-visibility: hidden;
+	-webkit-perspective: 1000;
+
+	width: 30%;
+	background: #2A6791;
+}
+nav ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;;
+}
+nav li {
+	display: block;
+	padding: 10px 20px;
+	border-bottom: 1px solid #225679;
+}
+nav:target {
+	z-index: 3;
+	-webkit-transform: translate3d(0, 0, 0);
+}
+nav:target ~ .container .containerOverlay {
+	display: block;
+}
+
+
+
+
+/* Flip in */
+#flipIn {
+	z-index: 4;
+	-webkit-transform: translate3d(-100%, 0, 0);
+	-webkit-perspective: 1200;
+}
+#flipIn:target .content {
+  -webkit-transform: rotateY(-180deg);
+}
+#flipIn:target ~ .container {
+	-webkit-transform: translate3d(30%, 0, 0);
+}
+#flipIn .content {
+	position: relative;
+	min-height: 100%;
+	-webkit-transition: all .5s;
+  -webkit-transform-style: preserve-3d;
+  -webkit-transform-origin: 100% 50%;
+}
+.front, .back {
+  position:absolute;
+  top:0;
+  bottom: 0;
+  left:0;
+  -webkit-backface-visibility:hidden;
+}
+.back {
+	width: 100%;
+	min-height: 100%;
+	background: #2A6791;
+  z-index:800;
+  -webkit-transform:rotateY(-180deg);
+}
+
+/* Reveal from Left */
+#revealLeft {
+  z-index: 1;
+  -webkit-transform: translate3d(0, 0, 0);
+}
+#revealLeft:target ~ .container {
+  -webkit-transform: translate3d(30%, 0, 0);
+}
+
+/* Zoom out reveal */
+#zoomOut {
+  background: #4481AA;
+  z-index: 1;
+  -webkit-transform: translate3d(0,0,0);
+}
+#zoomOut:target ~ .container {
+  -webkit-transform: scale(0.5) translate3d(200px, -100px, 0);
+}

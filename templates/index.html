@@ -1,27 +1,82 @@
-{% extends "base.html" %}
+{% extends "main.html" %}
  
 {% block head %}
   <link rel="stylesheet" href="{{ static_url("index.css") }}"/>
-  <link rel="stylesheet" href="{{ static_url("sidebar.css") }}"
+  <link rel="stylesheet" href="{{ static_url("sidebar.css") }}">
+  <link rel="stylesheet" href="{{ static_url("footer.css") }}">
+
 {% end %}
 
-{% block body %}
-    <div>
-    {% include "sidebar.html" %}
-    </div>
-    <div class="index-page">
-    <div class="index-content">
+{% block content %}
+
     {% for entry in entries %}
-    <div class="entry">
-        <h1 class=entry-module-title><a href="/entry?entry_id={{ entry.entry_id  }}">{{ entry.title   }}</a></h1>
-        <div class="entry-module-summary">{% raw entry.html %}</div>
+    <div class="entry" id="entry-{{ entry.slug }}">
+        <h1 class="entry-module-title"><a href="./entry/{{ entry.slug  }}">{{ entry.title   }}</a></h1>
+        {% if user %}
+        <a href="./write/{{ entry.slug }}"><span id="title-hover-edit" class="title-hover glyphicon glyphicon-edit"></span></a>
+        <a href="#"><span class="title-hover-remove title-hover glyphicon glyphicon-remove"></span></a>
+        <div class="alert alert-danger fade in dis-none">
+            <h4>Do you really want to remove "{{ entry.title }}"?</h4>
+            <button type="button" class="btn btn-danger remove-btn">Remove</button>
+            <button type="button" class="btn btn-default remove-cancel">Not now</button>
+        </div>
+        {% end %}
+        <div class="publish-date"><strong>Posted on {{ entry.date }}</strong></div>
+        <div class="entry-module-summary">{% raw entry.summary %}</div>
     </div>
     {% end %}
-    </div>
-    </div>
 {% end %}
 
 {% block script %}
+    {% if user %}
+    <script type="text/javascript">
+        $(function() {
+            $(".title-hover-remove").each(function(index) {
+                console.log(index);
+                $(this).click(function() {
+                $(this).parent().siblings(".alert").
+                    css("display", "block").alert();
+                });
+            });
+
+            $(".remove-cancel").each(function(index) {
+                $(this).click(function() {
+                    $(this).parent().fadeOut(200);
+                });
+            });
+
+            $(".remove-btn").each(function(index) {
+                $(this).click(function() {
+                    //get slug of the entry
+                    var slug = $(this).parent().parent().
+                        attr("id").substring("entry-".length)
+                    //send ajax request to remove it
+                    removeEntry(slug);
+                });
+            });
+
+        });
+
+        function removeAlert(title, slug) {
+            if(confirm("Are you sure to remove " + title + "?")) {
+                removeEntry(title, slug);
+            }
+        }
+
+        function removeEntry(slug) {
+            $.ajax({
+                url: "/ajax/removeEntry/" + slug
+            }).done(                
+                function(data) {
+                    console.log(slug + " removed!");
+                    $("#" + "entry-" + slug).fadeOut();
+            });
+
+        }
+
+    </script>
+    {% end %}
+
     {% if new %}
         <script type="text/javascript">
             var first = $("div.entry:first");
