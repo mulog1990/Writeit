@@ -52,7 +52,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Html Preview</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body entry-text">
         ...
       </div>
       <div class="modal-footer">
@@ -118,6 +118,21 @@
       }
       });
   }
+
+  function addAutoTags() {
+    console.log("in add auto");
+    $.ajax({
+      url: "/ajax/autoTag",
+      data: {
+        "markdown": $("#markdown-input").val()
+      },
+      success: function(data) {
+        autoTags = dansota.split(",");
+        addTags(autoTags);
+      }
+    });
+  }
+
   </script>
 
   <script type="text/javascript">
@@ -142,11 +157,16 @@
     }
 
     $(document).ready(function() {
-      $("#add-tag-btn").click(addTags);
+      $("#add-tag-btn").click(addInputTags);
+      $("#auto-tag-btn").click(addAutoTags);
     });
 
-    function addTags() {
-      var newTags = $("#tag-input").val().split(',');
+    function addInputTags() {
+      addTags($("#tag-input").val().split(','));
+    }
+
+    //@param newTags: string array of tags to add
+    function addTags(newTags) {
       for (var i = 0;i < newTags.length;i++) {
         var tag = newTags[i];
         if(!$("#tag-" + tag).length) {   //tag doesnt exist yet

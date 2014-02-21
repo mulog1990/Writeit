@@ -1,5 +1,6 @@
 from HTMLParser import HTMLParser
 import markdown
+import jieba.analyse
 
 class Stripper(HTMLParser):
     def __init__(self):
@@ -23,3 +24,7 @@ def attach_summary(entries):
             entry["html"] = entry["html"][:300]
     return
 
+def auto_tag(text):
+    text = strip_html(markdown.markdown(text))
+    tags = jieba.analyse.extract_tags(text, topK=15)
+    return tags

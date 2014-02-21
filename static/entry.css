@@ -13,19 +13,6 @@
 	float:left;
 }
 
-#entry-text p {
-	margin-top: 40px;
-	text-align: left;
-	margin-left: 0;
-	margin-right: 25px;
-	font-size: large;
-}
-
-#entry-text  pre p,
-#entry-text blockquote p {
-	margin-top: auto;
-}
-
 #entry-nav-prev {
 	float: left;
 }

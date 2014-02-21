@@ -34,6 +34,7 @@ class Application(tornado.web.Application):
             (r"/ajax/parse", ParseHandler),           #takes markdown input, returns html
             (r"/ajax/get-slug", SlugHandler),
             (r"/ajax/removeEntry/([^/]+)", RemoveEntryHandler),
+            (r"/ajax/autoTag", AutoTagHandler),
             (r"/tags", TagsHandler),
             (r"/tag/([^/]+)", TagHandler),
         ]
@@ -68,7 +69,7 @@ class ParseHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
         md = self.get_argument("markdown","")
-        self.write(markdown.markdown(md))
+        self.write(markdown.markdown(md, extensions=["fenced_code"]))
 #self.write(markdown.markdown(unicode(md, "utf-8")))
 
 class TestHandler(BaseHandler):
@@ -165,7 +166,13 @@ class EntryHandler(BaseHandler):
             self.write("What the fuck")
 
 
+class AutoTagHandler(BaseHandler):
+    def get(self):
+        text = self.get_argument("markdown", None)
+        if text:
+            self.write(",".join(utils.auto_tag(text)))
             
+        self.finish()
 
 
 
