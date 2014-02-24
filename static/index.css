@@ -43,4 +43,18 @@ html,body {
   margin-bottom: 30px;
 }
 
+#new-entry-btn {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  margin-top: 15px;
+  margin-right: 15px;
+}
+
+#new-entry-btn {
+  font-size: 2em;
+}
+
+
+
 

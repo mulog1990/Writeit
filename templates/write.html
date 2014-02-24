@@ -127,7 +127,7 @@
         "markdown": $("#markdown-input").val()
       },
       success: function(data) {
-        autoTags = dansota.split(",");
+        autoTags = data.split(",");
         addTags(autoTags);
       }
     });

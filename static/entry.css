@@ -6,7 +6,11 @@
 
 #entry-title {
 	font-size: 4em;
-	margin-bottom: 30px;
+	margin-bottom: 0;
+}
+
+#entry-title-div {
+	margin-bottom: 10px;
 }
 
 #tag-span {
@@ -31,4 +35,16 @@
 }
 
 
+.title-hover {
+  height: 25px;
+  display: none;
+  margin-left: 10px;
+}
 
+#entry-title-div:hover .title-hover {
+  display: inline;
+}
+
+#entry-text {
+	margin-top: 75px;
+}

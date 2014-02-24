@@ -9,8 +9,19 @@
 {% end %}
 
 {% block content %}
-  <div class="entry-content h-center v-center">
+  <div class="entry-content h-center v-center" id="{{ entry.slug if entry else ""}}">
+  <div class="h-center" id="entry-title-div"> 
   <h1 class="h-center" id="entry-title">{{ entry["title"] if entry else ""}}</h1>
+    {% if user %}
+        <a href="/write/{{ entry.slug }}"><span id="title-hover-edit" class="title-hover glyphicon glyphicon-edit"></span></a>
+        <a href="#"><span class="title-hover-remove title-hover glyphicon glyphicon-remove"></span></a>
+        <div class="alert alert-danger fade in dis-none">
+            <h4>Do you really want to remove "{{ entry.title }}"?</h4>
+            <button type="button" class="btn btn-danger remove-btn">Remove</button>
+            <button type="button" class="btn btn-default remove-cancel">Not now</button>
+        </div>
+        {% end %}
+    </div>
     <div class="tags-div">
       <span id="tag-span">tags:</span> 
       <ul class="tags">
@@ -46,6 +57,51 @@
  {% end %}
 
 {% block script %}
+
+    {% if user %}
+      <script type="text/javascript">
+      $(function() {
+        $(".title-hover-remove").each(function(index) {
+            $(this).click(function() {
+            $(this).parent().siblings(".alert").
+                css("display", "block").alert();
+            });
+        });
+
+        $(".remove-cancel").each(function(index) {
+            $(this).click(function() {
+                $(this).parent().fadeOut(200);
+            });
+        });
+
+        $(".remove-btn").each(function(index) {
+            $(this).click(function() {
+                //get slug of the entry
+                var slug = $(".entry-content").attr("id");
+                //send ajax request to remove it
+                removeEntry(slug);
+            });
+        });
+
+    });
+
+    function removeEntry(slug) {
+        $.ajax({
+            url: "/ajax/removeEntry/" + slug
+        }).done(                
+            function(data) {
+                console.log(slug + " removed!");
+                if(data.toUpperCase() == "OK") {
+                  console.log("ok!");
+                  window.location.replace("/");
+                }
+        });
+
+    }
+    </script>
+    {% end %}
+
+
  	<script type="text/javascript">
 
     //enable tooltip

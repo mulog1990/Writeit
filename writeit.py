@@ -100,11 +100,11 @@ class WriteHandler(BaseHandler):
         slug = param
 
         #save markdown
-        self.db.execute(
-               "INSERT INTO markdowns SET markdown=%s",
-                self.get_argument("markdown", ""),
-                )
-        
+        query.save_markdown(db=self.db, 
+                markdown=self.get_argument("markdown", ""),
+                slug=slug
+        )
+                
         markdown_id = int(self.db.execute("SELECT LAST_INSERT_ID()"))
         
  
@@ -144,9 +144,12 @@ class EntryHandler(BaseHandler):
                 int(entry["entry_id"]))
 
         neighbors = query.get_neighbor_entries(self.db, entry["entry_id"])
-        print neighbors
 
-        self.render("entry.html", entry=entry, neighbors=neighbors)
+        user = self.get_current_user()
+        print "^" * 50
+        print user
+
+        self.render("entry.html", entry=entry, neighbors=neighbors, user=user)
 
     def get(self):
         entry = None

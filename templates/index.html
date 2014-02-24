@@ -8,7 +8,7 @@
 {% end %}
 
 {% block content %}
-
+    <a href="/write/"><span id="new-entry-btn" class="glyphicon glyphicon-plus">New</span></a>
     {% for entry in entries %}
     <div class="entry" id="entry-{{ entry.slug }}">
         <h1 class="entry-module-title"><a href="./entry/{{ entry.slug  }}">{{ entry.title   }}</a></h1>
@@ -29,52 +29,7 @@
 
 {% block script %}
     {% if user %}
-    <script type="text/javascript">
-        $(function() {
-            $(".title-hover-remove").each(function(index) {
-                console.log(index);
-                $(this).click(function() {
-                $(this).parent().siblings(".alert").
-                    css("display", "block").alert();
-                });
-            });
-
-            $(".remove-cancel").each(function(index) {
-                $(this).click(function() {
-                    $(this).parent().fadeOut(200);
-                });
-            });
-
-            $(".remove-btn").each(function(index) {
-                $(this).click(function() {
-                    //get slug of the entry
-                    var slug = $(this).parent().parent().
-                        attr("id").substring("entry-".length)
-                    //send ajax request to remove it
-                    removeEntry(slug);
-                });
-            });
-
-        });
-
-        function removeAlert(title, slug) {
-            if(confirm("Are you sure to remove " + title + "?")) {
-                removeEntry(title, slug);
-            }
-        }
-
-        function removeEntry(slug) {
-            $.ajax({
-                url: "/ajax/removeEntry/" + slug
-            }).done(                
-                function(data) {
-                    console.log(slug + " removed!");
-                    $("#" + "entry-" + slug).fadeOut();
-            });
-
-        }
-
-    </script>
+    <script type="text/javascript" src="{{ static_url("entry_action.js") }}"/>
     {% end %}
 
     {% if new %}

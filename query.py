@@ -57,6 +57,18 @@ def get_entries_by_tag(db, tag):
     return db.query("SELECT * FROM entry_v,tag_v WHERE tag_v.tag=%s AND\
             tag_v.entry_id=entry_v.entry_id", tag)
 
+def save_markdown(db, markdown, slug):
+    entry_id = db.get("SELECT id FROM entries WHERE slug=%s LIMIT 1", slug)
+    if entry_id:
+        entry_id = entry_id["id"]
+    else:
+        entry_id = -1
+
+    db.execute("INSERT INTO markdowns SET markdown=%s,entry_id=%s",\
+            markdown, entry_id)
+
+    return
+
 
 
 
