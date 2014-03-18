@@ -2,6 +2,9 @@ html,body {
   padding: 0;
 }
 
+body{
+  height: 0;
+}
 
 .center {
   margin-left: auto;
@@ -11,10 +14,11 @@ html,body {
 .main-content {
   margin-left: 400px;
   margin-right: 100px;
+  /*background: #123456;*/
 }
 
 .entry-module-summary {
-  margin-right: 125px;
+  margin-right: 25px;
   text-align: justify;
   margin-left: 5px;
 }
@@ -55,6 +59,79 @@ html,body {
   font-size: 2em;
 }
 
+#recent-cell {
+  float:left;
+  margin-left: 75px;
+  width: 50%;
+  min-height: 66%;
+  margin-top: 80px;
+}
+
+#intro-cell {
+  float:right;
+  margin-right: 75px;
+  width: 300px;
+  min-height: 19%;
+  margin-top: 80px;
+}
+
+#tweets-cell {
+  float: right;
+  margin-right: 75px;
+  width: 300px;
+  min-height: 43%;
+  margin-bottom: 100px;
+  margin-top: 30px;
+}
 
 
+.avatar {
+  margin-left: 45px;
+  margin-top: -15px;
+}
 
+.avatar-id {
+  margin-left: 10px;
+  font-size: 3em;
+  color: black;
+}
+
+
+#social-div {
+  margin-left: 15px;
+  margin-top: 10px;
+  margin-bottom: 3px;
+}
+
+.social {
+  margin-top: 5px;
+  padding-left: 0;
+  margin-left: 30px;
+  list-style: None;
+  display: inline-block;
+}
+
+.social li {
+  display: inline-block;
+}
+
+.social:hover li a img{
+  /*opacity: 0.5;*/
+  -webkit-filter: blur(0.8px);
+}
+
+.social li a:hover img{
+  /*opacity: 1;*/
+  -webkit-filter: blur(0);
+  /*position: relative;
+  bottom: 7px;*/
+}
+
+.social-icon {
+  height: 35px;
+}
+
+
+#find-me-on {
+  font-size: 1.25em;
+}

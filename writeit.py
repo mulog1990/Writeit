@@ -27,16 +27,18 @@ class Application(tornado.web.Application):
         handlers= [
             (r"/", HomeHandler),
             (r"/auth/login", AuthLoginHandler),
-            (r"/test", TestHandler),
+            (r"/about", AboutHandler),
             (r"/write/([^/]*)", WriteHandler),
+            (r"/archive", ArchiveHandler),
             (r"/entry", EntryHandler),
             (r"/entry/([^/]+)", EntryHandler),
-            (r"/ajax/parse", ParseHandler),           #takes markdown input, returns html
+            (r"/ajax/parse", ParseHandler), #takes markdown input, returns html
             (r"/ajax/get-slug", SlugHandler),
             (r"/ajax/removeEntry/([^/]+)", RemoveEntryHandler),
             (r"/ajax/autoTag", AutoTagHandler),
             (r"/tags", TagsHandler),
             (r"/tag/([^/]+)", TagHandler),
+            (r".*", BaseHandler)
         ]
 
         settings=dict(
@@ -65,6 +67,14 @@ class BaseHandler(tornado.web.RequestHandler):
             return None
         return user
 
+
+    def get(self):
+        self.write_error(404)
+
+    def write_error(self, status_code, **kwargs):
+        self.render("error.html", status_code=status_code)
+
+
 class ParseHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
@@ -72,10 +82,9 @@ class ParseHandler(BaseHandler):
         self.write(markdown.markdown(md, extensions=["fenced_code"]))
 #self.write(markdown.markdown(unicode(md, "utf-8")))
 
-class TestHandler(BaseHandler):
-    @tornado.web.authenticated
+class AboutHandler(BaseHandler):
     def get(self):
-        self.render("index.html")
+        self.render("about.html")
 
 class WriteHandler(BaseHandler):
     @tornado.web.authenticated
@@ -114,17 +123,19 @@ class WriteHandler(BaseHandler):
 
         if slug:
             self.db.execute(
-                "UPDATE entries SET title=%s,markdown_id=%s,slug=%s where slug=%s",
+                "UPDATE entries SET title=%s,markdown_id=%s,\
+                slug=%s where slug=%s",
                 self.get_argument("title","untitled"),
                 int(markdown_id),
                 new_slug,
-                slug)
+                slug
+            )
         else:
             #new entry
             user_email = self.get_secure_cookie("user")
             self.db.execute(
-                "INSERT INTO entries SET title=%s,markdown_id=%s,slug=%s,author_id=(\
-                SELECT id FROM users WHERE email=%s)",
+                "INSERT INTO entries SET title=%s,markdown_id=%s,\
+                slug=%s,author_id=(SELECT id FROM users WHERE email=%s)",
                 title,markdown_id,new_slug,user_email
             )
 
@@ -133,6 +144,16 @@ class WriteHandler(BaseHandler):
 
         self.redirect("/entry/" + new_slug)
 
+class ArchiveHandler(BaseHandler):
+    def get(self):
+        import datetime
+        earliest_year = query.get_earliest_year(self.db).year
+        current_year = datetime.datetime.today().year
+        archive = {}
+        for year in range (earliest_year, current_year + 1):
+            archive[year] = query.get_entries_by_year(self.db, year)
+        self.render("archive.html", archive=archive)
+        
        
 
 class EntryHandler(BaseHandler):
@@ -140,8 +161,10 @@ class EntryHandler(BaseHandler):
         html = markdown.markdown(entry["markdown"], extensions=["fenced_code"])
         entry["html"] = html
         del entry["markdown"]
-        entry["tags"] = self.db.query("SELECT tag FROM tag_v WHERE entry_id=%s",
-                int(entry["entry_id"]))
+        entry["tags"] = self.db.query(
+                "SELECT tag FROM tag_v WHERE entry_id=%s",
+                int(entry["entry_id"])
+        )
 
         neighbors = query.get_neighbor_entries(self.db, entry["entry_id"])
 
@@ -200,7 +223,9 @@ class HomeHandler(BaseHandler):
         entries = self.db.query("select * from entry_v order by entry_id desc limit 10")
         new = self.get_arguments("new", None)
         for entry in entries:
-            entry["summary"] = utils.strip_html(markdown.markdown(entry["markdown"]))
+            entry["summary"] = utils.strip_html(
+                    markdown.markdown(entry["markdown"])
+            )
             if len(entry["summary"]) > 300:
                 entry["summary"] = entry["summary"][:300]
             entry["date"] = entry["published"]
@@ -253,6 +278,8 @@ class TagHandler(BaseHandler):
         utils.attach_summary(entries)
         user = self.get_current_user()
         self.render("tag.html", entries=entries, user=user, tag=tag)
+
+
 
 def main():
     tornado.options.parse_command_line()

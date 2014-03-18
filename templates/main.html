@@ -5,15 +5,13 @@
 {% end %}
 
 {% block body %}
+	<img class="bg" src="/static/img/index.jpg"/>
     <div>
-    {% include "sidebar.html" %}
+    {% include "header.html" %}
     </div>
-    <div class="main-page container">
-    <div class="main-content">
+    <!div class="main-page container">
     {% block content %}{% end %}
-    </div>
-    {% include "footer.html" %}
-    </div>
+    <!/div>
 {% end %}
 
 

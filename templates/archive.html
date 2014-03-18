@@ -1,0 +1,54 @@
+{% extends "main.html" %}
+
+{% block head %}
+	<link rel="stylesheet" href="{{ static_url("footer.css") }}"/>
+	<link rel="stylesheet" href="{{ static_url("archive.css") }}"/>
+{% end %}
+
+{% block content %}
+	<div class="cell content-cell" id="archive-cell">
+		<div class="panel-group" id="accordion">
+  {% for year in sorted(archive, reverse=True) %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ year }}">
+        	{{ year }}
+        </a>
+      </h4>
+    </div>
+    <div id="collapse-{{ year }}" class="panel-collapse collapse">
+      <div class="panel-body">
+        <ul class="entry-list-by-year" id="list-{{ year }}">
+        {% for entry in archive[year] %}
+          	<li class="archive-entry">
+              <span class="archive-entry-date">{{ entry["published"].date() }}</span>
+              <a class="archive-entry-title" href="./entry/{{ entry["slug"] }}">{{ entry["title"] }}</a>
+            </li>
+        {% end %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  {% end %}
+
+</div>
+	</div>
+
+
+{% end %}
+
+{% block script%}
+<script>
+  $(function() {
+    $(".panel-collapse:first").addClass("in");
+  });
+
+  $(function() {
+    setActiveHeader("header-archive");
+  });
+
+
+</script>
+{% end %}
+

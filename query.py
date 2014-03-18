@@ -69,11 +69,28 @@ def save_markdown(db, markdown, slug):
 
     return
 
+def get_earliest_year(db):
+    entry = db.get("SELECT published FROM entries ORDER BY published ASC LIMIT 1")
+    if entry:
+        return entry["published"]
+    else:
+        return -1
 
+def get_entries_by_year(db, year):
+    entries = db.query("SELECT * FROM entry_v WHERE published BETWEEN\
+            '%s-01-01' AND '%s-12-31' ORDER BY published DESC", year, year)
+    return entries
 
+def get_year_range(db):
+    oldest = db.query("SELECT published from entry_v ORDER by published\
+            ASC LIMIT 1")
+    newest = db.query("SELECT published from entry_v ORDER by published\
+            DESC LIMIT 1")
 
+    oldest_year = oldest["published"].split("-")[0]
+    newest_year = newest["published"].spili("-")[0]
 
-
+    return (oldest_year, oldest_year)
 
 
 

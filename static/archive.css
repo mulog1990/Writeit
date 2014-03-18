@@ -1,0 +1,40 @@
+.archive-entry {
+	font-size: 1.2em;
+}
+
+#accordion {
+	width: 80%;
+	margin: auto;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+.content-cell {
+
+}
+
+.panel-default .panel-heading {
+	background-color: rgba(222,222,222,0.2);
+	color: #2a6496;
+}
+
+.archive-entry-date {
+	margin-left: 5%;
+}
+
+.archive-entry-title {
+	margin-left: 20%;
+	margin-right: 0;
+}
+
+.entry-list-by-year {
+	padding: 0;
+	list-style: none;
+	display: list-item;
+}
+
+.archive-entry {
+	width: 100%;
+}

@@ -1,3 +1,15 @@
+html {
+  height: 100%;
+  width: 100%;
+  max-height: 100%;
+  /*overflow: hidden;*/
+}
+
+body {
+
+  font-family: "Quantico", "Wenquanyi Micro Hei", "Microsoft YaHei";
+}
+
 .center {
   margin-left: auto;
   margin-right: auto;
@@ -11,17 +23,15 @@
 .main-page {
   padding: 0px;
   padding-top: 0px;
-  background-color: #BCBDCC;
+  /*background-color: #BCBDCC;*/
   margin-top: 0;
-  position: absolute;
-  top: 0;
   width: 100%;
   margin-bottom: 0;
-  min-height: 100%;
 }
 
 .main-content {
   padding-bottom: 75px;
+
 }
 
 .inline {
@@ -32,6 +42,7 @@
   overflow: hidden
 }
 
+/*
 pre {
   background-color: #fbedeb;
   color: #dd6751;
@@ -39,6 +50,20 @@ pre {
   -webkit-border-radius: 5px;
   font-family: Menlo,Monaco,Consolas;
 }
+*/
+
+pre {
+  background-color: transparent;
+  border: 0;
+  padding: 0;
+}
+
+code {
+  background-color: #fbedeb;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+
 
 blockquote {
   background-color: #494949;
@@ -57,7 +82,7 @@ blockquote {
   text-align: left;
   margin-left: 0;
   margin-right: 25px;
-  font-size: large;
+  font-size: small;
 }
 
 #entry-text  pre p,
@@ -65,4 +90,108 @@ blockquote {
   margin-top: auto;
 }
 
+/*header*/
+header{
+  position: fixed;
+  top: 0;
+  z-index: 1024;
+  min-width: 100%;
+  height: 50px;
+  -webkit-box-shadow: 0 2px 3px rgba(0,0,0,0.5);
+  background: #fff;
+  margin: 0;
+}
 
+header ul{
+  min-height: 100%;
+  margin-bottom: 0;
+  margin-right: 300px;
+  float: right;
+  list-style: None;
+  padding:0;
+  display: table;
+}
+
+header ul:hover li {
+  border: none;
+  -webkit-box-shadow: 0 0 0 black;
+}
+
+header ul li {
+  margin-top: 10px;
+  line-height: 30px;
+  display: table-cell;
+  min-height: 70%;
+  float:left;
+  margin-right:0;
+  min-width: 50px;
+  text-align: center;
+  padding: 0;
+  -webkit-border-radius: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+header ul li a {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+header ul li:hover {
+  border: 1.5px solid #12AA45;
+  -webkit-box-shadow: 0 3px 3px rgba(12,45,188,0.2);
+}
+
+header ul .active {
+  border: 1.5px solid #12AA45;
+  -webkit-box-shadow: 0 3px 3px rgba(12,45,188,0.2);
+}
+
+header ul li a:hover {
+  text-decoration: none;
+}
+
+
+
+/*cell div*/
+.cell {
+  padding: 10px;
+  -webkit-border-radius:6px;
+  -webkit-box-shadow: 0 5px 8px rgba(0,0,0,0.5);
+  background: FloralWhite;
+  height: auto;
+  overflow: hidden;
+  opacity: 0.95;
+  margin-top: 50px;
+  display: block;
+}
+
+.content-cell {
+  position: relative;
+  padding: 15px 40px;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 80px;
+  margin-bottom: 50px;
+  min-height: 75%;
+}
+
+/*background image*/
+.bg {
+  position: fixed;
+  min-height: 100%;
+  min-width: 100%;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: -80;
+}
+
+/*avatar*/
+.avatar {
+  width: 45px;
+  height: 45px;
+  -webkit-border-radius: 55px;
+  -webkit-box-shadow: 2px 1px 2px rgba(0,0,128,0.5);
+}

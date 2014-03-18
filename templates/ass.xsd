@@ -1,0 +1,66 @@
+<xs:element name="model">
+
+<xs:attribute name="name" type="xs:string"/>
+<xs:attribute name="manufacturecost" type="xs:positivenumber"/>
+<xs:attribute name="retailprice" type="xs:positivenumber"/>
+<xs:attribute name="designtype" type="xs:string"/>
+<xs:attribute name="soletype" type="xs:string"/>
+<xs:attribute name="cushiontype" type="xs:string"/>
+<xs:attribute name="sport" type="xs:string" maxoccurs="unbounded"/>
+
+<xs:element name="replaces" type="xs:string" minoccurs=0 maxoccurs=1/>
+<xs:element name="gradation" type="xs:string" minoccurs=0 maxoccurs=1/>
+e
+<xs:element name="adaption">
+<xs:complexType>
+<xs:attribute name="adaptsmodel" type="xs:string" minoccurs=0 maxoccurs=1/>
+<xs:attribute name="adaptsforcountry" type="xs:string" minoccurs=0 maxoccurs=1/>
+<xs:attribute name="designedclimate" type="xs:string" minoccurs=0 maxoccurs=1/>
+</xs:complexType>
+</xs:element>
+
+
+<xs:element name="shippingcost" maxoccurs="unbounded">
+<xs:complexType>
+<xs:sequence>
+<xs:attribute name="city" ref="city" minoccurs=1 maxoccurs=1/>
+<xs:attribute name="cost" type="xs:positivenumber" minoccurs=1 maxoccurs=1/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+</xs:element>
+
+
+<!-- <xs:element name="sales" maxoccurs="1">
+<xs:element name="sale" maxoccurs="unbounded">
+<xs:attribute name="city" type="xs:string"/>
+<xs:attribute name="pairs" type="xs:integer"/>
+<xs:attribute name="price??????"/>
+<xs:attribute name="profit" type="xs:number"/>
+<xs:attribute name="climate" type="xs:string"/>
+</xs:element>
+</xs:element>
+ -->
+
+<xs:element name="cities">
+<xs:element name="city">
+<xs:attribute name="sale" type="xs:number"/>
+<xs:attribute name="pairs" type="xs:integer"/>
+<xs:attribute name="price??????"/>
+<xs:attribute name="profit" type="xs:number"/>
+<xs:attribute name="climate" type="xs:string"/>
+<xs:element name="shop" type="xs:string">
+<xs:attribute name="sale" type="postivenumber"/>
+</xs:element>
+</xs:element>
+</xs:element>
+
+<xs:element name="designers">
+<xs:elemnt name="designer">
+<xs:attribute name="name" type="xs:number"/>
+<xs:attribute name="address" type="xs:string"/>
+<xs:attribute name="phone" type="xs:string"/>
+</xs:element>
+</xs:element>
+

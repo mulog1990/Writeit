@@ -1,9 +1,6 @@
 {% extends "main.html" %}
  
-{% block head %}header2
-  <link rel="stylesheet" href="{{ static_url("index.css") }}"/>
-  <link rel="stylesheet" href="{{ static_url("sidebar.css") }}">
-  <link rel="stylesheet" href="{{ static_url("footer.css") }}">
+{% block head %}
   <link rel="stylesheet" href="{{ static_url("tags.css") }}">
   <link rel="stylesheet" href="{{ static_url("tag.css") }}">
 
@@ -11,6 +8,7 @@
 {% end %}
 
 {% block content %}
+    <div class="cell content-cell">
     <div class="tags-div">
     <h1 style="float: left;">Posts with tag  </h1>
     <ul class="tags">
@@ -28,6 +26,7 @@
         {% end %}
         <div class="entry-module-summary">{% raw entry.html %}</div>
     </div>
+</div>
     {% end %}
 {% end %}
 

@@ -1,0 +1,15 @@
+{% extends "main.html" %}
+ 
+{% block head %}
+  <link rel="stylesheet" href="{{ static_url("error.css") }}"/>
+{% end %}
+
+{% block content %}
+    <div class="cell content-cell">
+    <div class="status-code">{{ status_code }}</div>
+    <div class="sorry">呃，还真是尴尬呢。。</div>
+    <div class="back-home"><a href="/">Go Home</a></div>
+    </div>
+{% end %}
+
+

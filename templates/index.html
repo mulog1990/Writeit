@@ -3,12 +3,15 @@
 {% block head %}
   <link rel="stylesheet" href="{{ static_url("index.css") }}"/>
   <link rel="stylesheet" href="{{ static_url("sidebar.css") }}">
+
   <link rel="stylesheet" href="{{ static_url("footer.css") }}">
 
 {% end %}
 
 {% block content %}
-    <a href="/write/"><span id="new-entry-btn" class="glyphicon glyphicon-plus">New</span></a>
+    <div> 
+    <div class="cell" id="recent-cell">
+    <span>Recent Posts >></span>
     {% for entry in entries %}
     <div class="entry" id="entry-{{ entry.slug }}">
         <h1 class="entry-module-title"><a href="./entry/{{ entry.slug  }}">{{ entry.title   }}</a></h1>
@@ -25,6 +28,25 @@
         <div class="entry-module-summary">{% raw entry.summary %}</div>
     </div>
     {% end %}
+    </div>
+    <div class="cell" id="intro-cell">
+        <div>About >></div>
+        <img class="avatar" src="{{ static_url("img/avatar.jpg")}}"><span class="avatar-id">mULog</span>
+        </br>
+        <div id="social-div">
+        <span id="find-me-on">Find me on: </span>
+        <ul class="social">
+            <li><a href="https://www.twitter.com/Mulog1990" title="Mulog1990@twitter"><img class=social-icon src="{{ static_url("img/social_icons/twitter.png")}}"></a></li>
+            <li><a href="https://www.github.com/Mulog1990" title="Mulog1990@Github"><img class=social-icon src="{{ static_url("img/social_icons/Github.png")}}"></a></li>
+            <li><a href="https://www.v2ex.com/member/mulog" title="mulog@V2EX"><img class=social-icon src="{{ static_url("img/social_icons/v2ex.png")}}"></a></li>
+        </ul>
+        </div>
+    </div>
+    <div class="cell" id="tweets-cell">
+        <div>Tweets >></div>
+        <a class="twitter-timeline" href="https://twitter.com/Mulog1990" data-widget-id="445434562982592512">Tweets by @Mulog1990</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    </div>
 {% end %}
 
 {% block script %}
@@ -41,6 +63,13 @@
             });
         </script>
     {% end %}
+
+      <script>
+      $(function() {
+        setActiveHeader("header-home");
+      });
+      </script>
+
 {% end %}
 
 

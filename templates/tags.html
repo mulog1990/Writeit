@@ -8,7 +8,7 @@
 {% end %}
 
 {% block content %}
-	<div class="h-center" id="tags-table">
+	<div class="cell content-cell" id="tags-cell">
 		<ul class="tags">
 			{% for tag in tags %}
 				<li class="tag-li">
@@ -18,4 +18,12 @@
 			{% end %}
 		</ul>
 	</div>
+{% end %}
+
+{% block script %}
+  <script>
+  $(function() {
+    setActiveHeader("header-tags");
+  });
+  </script>
 {% end %}
