@@ -64,10 +64,9 @@ def save_markdown(db, markdown, slug):
     else:
         entry_id = -1
 
-    db.execute("INSERT INTO markdowns SET markdown=%s,entry_id=%s",\
+    return db.execute("INSERT INTO markdowns SET markdown=%s,entry_id=%s",\
             markdown, entry_id)
 
-    return
 
 def get_earliest_year(db):
     entry = db.get("SELECT published FROM entries ORDER BY published ASC LIMIT 1")
@@ -92,6 +91,9 @@ def get_year_range(db):
 
     return (oldest_year, oldest_year)
 
+def get_entry_by_slug(db, slug):
+    return db.get("SELECT * FROM entry_v WHERE slug=%s", slug)
 
-
+def get_last_insert_id(db):
+    return db.execute("SELECT LAST_INSERT_ID()")
 

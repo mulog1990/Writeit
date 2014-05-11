@@ -169,8 +169,6 @@ class EntryHandler(BaseHandler):
         neighbors = query.get_neighbor_entries(self.db, entry["entry_id"])
 
         user = self.get_current_user()
-        print "^" * 50
-        print user
 
         self.render("entry.html", entry=entry, neighbors=neighbors, user=user)
 
@@ -220,7 +218,7 @@ class AuthLoginHandler(BaseHandler, tornado.auth.GoogleMixin):
     
 class HomeHandler(BaseHandler):
     def get(self):
-        entries = self.db.query("select * from entry_v order by entry_id desc limit 10")
+        entries = self.db.query("select * from entry_v order by entry_id desc limit 3")
         new = self.get_arguments("new", None)
         for entry in entries:
             entry["summary"] = utils.strip_html(
