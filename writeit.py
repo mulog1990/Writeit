@@ -94,7 +94,7 @@ class WriteHandler(BaseHandler):
         entry = None
         tags = None
         if slug:
-            entry = self.db.get("SELECT * FROM entry_v WHERE slug=%s", slug) 
+            entry = query.get_entry_by_slug(self.db, slug) 
             entry["tags"] = query.get_tags(self.db, entry["entry_id"])
         self.render("write.html", entry=entry)
 
@@ -109,36 +109,31 @@ class WriteHandler(BaseHandler):
         slug = param
 
         #save markdown
-        query.save_markdown(db=self.db, 
+        markdown_id = query.save_markdown(db=self.db, 
                 markdown=self.get_argument("markdown", ""),
                 slug=slug
         )
-                
-        markdown_id = int(self.db.execute("SELECT LAST_INSERT_ID()"))
         
- 
+
         #create new entry or   
         #update curent_markdown for existing entry
         new = False
 
         if slug:
-            self.db.execute(
-                "UPDATE entries SET title=%s,markdown_id=%s,\
-                slug=%s where slug=%s",
-                self.get_argument("title","untitled"),
+            query.update_entry(
+                self.db,
+                title,
                 int(markdown_id),
                 new_slug,
                 slug
             )
+
         else:
             #new entry
             user_email = self.get_secure_cookie("user")
-            self.db.execute(
-                "INSERT INTO entries SET title=%s,markdown_id=%s,\
-                slug=%s,author_id=(SELECT id FROM users WHERE email=%s)",
-                title,markdown_id,new_slug,user_email
-            )
-
+            query.create_entry(self.db, title, markdown_id,\
+                    new_slug, user_email)
+        
         #save tags
         query.update_tags(self.db, new_slug, tags)
 
@@ -158,36 +153,35 @@ class ArchiveHandler(BaseHandler):
 
 class EntryHandler(BaseHandler):
     def render_self(self, entry):
+        #convert stored markdown to html for output
         html = markdown.markdown(entry["markdown"], extensions=["fenced_code"])
         entry["html"] = html
         del entry["markdown"]
-        entry["tags"] = self.db.query(
-                "SELECT tag FROM tag_v WHERE entry_id=%s",
-                int(entry["entry_id"])
-        )
-
+        
+        #get tags for current entry
+        entry["tags"] = query.get_tags(self.db, entry["entry_id"])
+        
         neighbors = query.get_neighbor_entries(self.db, entry["entry_id"])
-
         user = self.get_current_user()
-
+ 
         self.render("entry.html", entry=entry, neighbors=neighbors, user=user)
 
-    def get(self):
-        entry = None
-        entry_id = self.get_argument("entry_id", None)
-        if entry_id:
-            entry = self.db.get("SELECT * FROM entry_v where entry_id=%s",
-                  int(entry_id))
-            render_self(entry)
+# def get(self):
+#       entry = None
+#entry_id = self.get_argument("entry_id", None)
+#       if entry_id:
+#           entry = self.db.get("SELECT * FROM entry_v where entry_id=%s",
+#                 int(entry_id))
+#           render_self(entry)
 
     def get(self, param):
         entry = None
         if param:
             slug = param
-            entry = self.db.get("SELECT * FROM entry_v where slug=%s", slug)
+            entry = query.get_entry_by_slug(self.db, slug)
             self.render_self(entry)
         else:
-            self.write("What the fuck")
+            self.write("This should not happen")
 
 
 class AutoTagHandler(BaseHandler):
@@ -218,12 +212,13 @@ class AuthLoginHandler(BaseHandler, tornado.auth.GoogleMixin):
     
 class HomeHandler(BaseHandler):
     def get(self):
-        entries = self.db.query("select * from entry_v order by entry_id desc limit 3")
+        entries = query.get_fresh_entries(self.db, 3)
         new = self.get_arguments("new", None)
         for entry in entries:
             entry["summary"] = utils.strip_html(
                     markdown.markdown(entry["markdown"])
             )
+            #show abstract only
             if len(entry["summary"]) > 300:
                 entry["summary"] = entry["summary"][:300]
             entry["date"] = entry["published"]
@@ -241,18 +236,21 @@ class RemoveEntryHandler(BaseHandler):
     def get(self, param):
         slug = param
         if slug:
-            self.db.execute("DELETE FROM entries WHERE slug=%s", slug)
+            query.remove_entry(self.db, slug)
             self.write("OK")
         else:
             self.write("Does not exist")
 
 
 class SlugHandler(BaseHandler):
+    #finds available slug
     def get(self):
         slug = self.get_argument("slug", None)
         if not slug:
-            slug = "no-name-dumbass"
+            slug = "no-slug"
         slug = slug.replace(u" ", u"-")
+        
+        #append proper sequence number to avoid conflict
         if not query.check_slug(self.db, slug):
             seq = 2
             slug += "-"

@@ -25,6 +25,16 @@ def check_slug(db, slug):
     else:
         return True
 
+def update_entry(db, title, markdown_id, new_slug, slug):
+
+    return db.update("UPDATE entries SET title=%s,markdown_id=%d,slug=%s \
+            WHERE slug=%s", title, markdown_id, new_slug, slug)
+
+def create_entry(db, title, markdown_id, slug, user_email):
+    return db.insert("INSERT INTO entries SET title=%s, markdown_id=%s,\
+            slug=%s, author_id=(SELECT id FROM users WHERE email=%s)",\
+            title, markdown_id, slug, user_email)
+
 def get_tags(db, entry_id):
     tags = db.query("SELECT tag FROM tag_v WHERE entry_id=%s", entry_id)
     return tags
@@ -96,4 +106,12 @@ def get_entry_by_slug(db, slug):
 
 def get_last_insert_id(db):
     return db.execute("SELECT LAST_INSERT_ID()")
+
+def get_fresh_entries(db, num_of_entries):
+    return db.query("SELECT * FROM entry_v ORDER BY entry_id DESC LIMIT %s",\
+            num_of_entries)
+    
+def remove_entry(db, slug):
+    db.execute("DELETE FROM entries WHERE slug=%s", slug)
+    return
 
