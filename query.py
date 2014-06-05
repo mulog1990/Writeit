@@ -27,7 +27,7 @@ def check_slug(db, slug):
 
 def update_entry(db, title, markdown_id, new_slug, slug):
 
-    return db.update("UPDATE entries SET title=%s,markdown_id=%d,slug=%s \
+    return db.update("UPDATE entries SET title=%s,markdown_id=%s,slug=%s \
             WHERE slug=%s", title, markdown_id, new_slug, slug)
 
 def create_entry(db, title, markdown_id, slug, user_email):
@@ -115,3 +115,9 @@ def remove_entry(db, slug):
     db.execute("DELETE FROM entries WHERE slug=%s", slug)
     return
 
+def get_markdowns(db, entry_id):
+    return db.query("SELECT id,created FROM markdowns WHERE entry_id=%s \
+            ORDER BY created DESC", entry_id)
+
+def get_markdown_by_id(db, markdown_id):
+    return db.get("SELECT markdown FROM markdowns WHERE id=%s", markdown_id)

@@ -31,8 +31,12 @@ body {
   height: auto;
 }
 
+#markdown-select {
+  margin-top: 15px;
+}
+
 #markdown-input {
-  margin-top: 3%;
+  margin-top: 5px;
   margin-bottom: 3%;
   width: 100%;
   background-color: #232323;

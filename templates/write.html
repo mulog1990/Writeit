@@ -18,7 +18,15 @@
       {% raw xsrf_form_html() %}
       <input name="title" type="text" class="form-control" id="title-input" value="{{ entry["title"] if entry else ""}}" placeholder="{{ "Title" if not entry else "" }}">
       <input class="hidden" name="new-slug" id="new-slug">
-      <div class="editor-slug">Slug: <div id="slug" class="inline">{{ entry["slug"] if entry else "" }}</div></div>
+      <div class="editor-slug">Slug(Click to modify): <div id="slug" class="inline">{{ entry["slug"] if entry else "" }}</div></div>
+        <select id="markdown-select" class="form-control" onchange="load_markdown(this.value)">
+            {% if entry and entry["markdowns"] %}
+                {% for i,markdown in enumerate(entry["markdowns"]) %}
+                <option value={{markdown["id"]}} id=markdown-{{markdown["id"]}} onselect="load_markdown()">{{ markdown["created"] }} {{"(Most Recent)" if i == 0 else ""}}</option>
+                {% end %}
+            {% end %}
+        </select>
+      
       <textarea id="markdown-input" name="markdown" rows="20" class="form-control">{{ entry["markdown"] if entry else "" }}</textarea>
       <div id="editor-tag">
         <input type="text" id="tag-input" class="form-control">
@@ -129,6 +137,15 @@
       success: function(data) {
         autoTags = data.split(",");
         addTags(autoTags);
+      }
+    });
+  }
+
+  function load_markdown(id) {
+    $.ajax({
+      url: "/ajax/markdown/" + id,
+      success: function(data) {
+        $("#markdown-input").text(data);
       }
     });
   }

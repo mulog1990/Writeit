@@ -60,10 +60,10 @@ body{
 }
 
 #recent-cell {
-  float:left;
-  margin-left: 75px;
-  width: 50%;
-  min-height: 66%;
+  float:right;
+  margin-right: 75px;
+  width: 30%;
+  min-height: 500px;
   margin-top: 80px;
 }
 
