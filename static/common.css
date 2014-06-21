@@ -180,6 +180,7 @@ header ul li a:hover {
 /*background image*/
 .bg {
   position: fixed;
+  background: #7E8A91;
   min-height: 100%;
   min-width: 100%;
   top: 0;
